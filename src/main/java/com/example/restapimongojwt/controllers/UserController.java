@@ -4,8 +4,8 @@ import com.example.restapimongojwt.JwtUtil.JwtUtil;
 import com.example.restapimongojwt.models.User;
 import com.example.restapimongojwt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.mapping.Encrypted;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,21 +19,23 @@ public class UserController {
     UserRepository userRepository;
 
     @PostMapping("/register")
-    private String register(@RequestBody User user)
+    private ResponseEntity<String> register(@RequestBody User user)
     {
-        if(userRepository.existsByEmail(user.getEmail()))
-        {
-            return "User with this email already exists";
+        if (userRepository.existsByEmail(user.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with this email already exists");
         }
-        String encryptedPassword= JwtUtil.encryptPassword(user.getPassword());
+
+        String encryptedPassword = JwtUtil.encryptPassword(user.getPassword());
         user.setPassword(encryptedPassword);
 
         userRepository.save(user);
+        JwtUtil jwtUtil = new JwtUtil();
+        String token = jwtUtil.generateToken(user);
 
-        String token = JwtUtil.generateToken(user);
-
-        return token;
+        return ResponseEntity.ok(token);
     }
+
+
 
 
 

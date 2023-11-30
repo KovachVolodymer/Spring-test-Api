@@ -19,36 +19,35 @@ import java.util.Objects;
 @Component
 public class JwtUtil {
 
-   @Value("${jwt.secret}")
-   private String secretKey;
+   private static final String secretKey = "MySecretKeyKovachVolodymyrSecretKey";
 
    @Value("${jwt.expiration}")
    private long expiration;
 
 
-   public static String createToken(Map<String, Object> claims, String subject)
+   public String createToken(Map<String, Object> claims, String subject)
    {
-      Date now =new Date();
-      Date expirationData= new Date(now.getTime()+expiration);
+       Date now = new Date();
+       Date expirationDate = new Date(now.getTime() + expiration);
 
-      Key signingKey=new SecretKeySpec(secretKey.getBytes(),SignatureAlgorithm.ES256.getJcaName());
+       Key signingKey = new SecretKeySpec(secretKey.getBytes(), SignatureAlgorithm.HS256.getJcaName());
 
-      return Jwts.builder()
-              .setClaims(claims)
-              .setSubject(subject)
-              .setIssuedAt(now)
-              .setExpiration(expirationData)
-              .signWith(signingKey)
-              .compact();
+       return Jwts.builder()
+               .setClaims(claims)
+               .setSubject(subject)
+               .setIssuedAt(now)
+               .setExpiration(expirationDate)
+               .signWith(signingKey)
+               .compact();
    }
 
-   public static String generateToken(User user)
+   public String generateToken(User user)
    {
        Map<String, Object> claims=new HashMap<>();
        claims.put("UserId",user.getId());
        claims.put("UserEmail",user.getEmail());
 
-       return createToken(claims, String.valueOf(user.getId()));
+       return createToken(claims, user.getId());
    }
 
     public static String encryptPassword(String password)
