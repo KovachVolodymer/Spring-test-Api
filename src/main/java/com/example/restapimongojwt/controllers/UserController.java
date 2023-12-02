@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("api/auth")
 public class UserController {
@@ -19,20 +21,33 @@ public class UserController {
     UserRepository userRepository;
 
     @PostMapping("/register")
-    private ResponseEntity<String> register(@RequestBody User user)
+    private ResponseEntity<Object> register(@RequestBody User user)
     {
+        JwtUtil jwtUtil = new JwtUtil();
         if (userRepository.existsByEmail(user.getEmail())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with this email already exists");
         }
 
-        String encryptedPassword = JwtUtil.encryptPassword(user.getPassword());
+        String encryptedPassword = jwtUtil.encryptPassword(user.getPassword());
         user.setPassword(encryptedPassword);
 
         userRepository.save(user);
-        JwtUtil jwtUtil = new JwtUtil();
+
         String token = jwtUtil.generateToken(user);
 
-        return ResponseEntity.ok(token);
+        Map<String, Object> response = Map.of(
+                "token", token,
+                "userEmail", user.getEmail()
+
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/login")
+    private ResponseEntity<Object> login(@RequestBody User user)
+    {
+        return null;
     }
 
 
