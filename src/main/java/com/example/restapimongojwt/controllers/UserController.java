@@ -11,11 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("api/auth")
 public class UserController {
 
@@ -45,9 +48,20 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    private ResponseEntity<Object> login(@RequestBody LoginRequest login) {
+    private ResponseEntity<Object> login(@Valid @RequestBody LoginRequest login) {
 
-        return null;
+        JwtUtil jwtUtil = new JwtUtil();
+        User user = userRepository.findByEmail(login.getEmail());
+
+        String token = jwtUtil.generateToken(user);
+
+        Map<Object, String> responseMap = new HashMap<>();
+        responseMap.put("name", user.getName());
+        responseMap.put("email", user.getEmail());
+        responseMap.put("token", token);
+
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
+
     }
 
 
