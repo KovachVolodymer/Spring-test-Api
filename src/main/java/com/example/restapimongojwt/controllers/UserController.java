@@ -1,13 +1,12 @@
 package com.example.restapimongojwt.controllers;
 
-import com.example.restapimongojwt.JwtUtil.JwtUtil;
+import com.example.restapimongojwt.JwtUtil.Jwt.JwtUtil;
 import com.example.restapimongojwt.JwtUtil.request.LoginRequest;
 import com.example.restapimongojwt.models.User;
 import com.example.restapimongojwt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/auth")

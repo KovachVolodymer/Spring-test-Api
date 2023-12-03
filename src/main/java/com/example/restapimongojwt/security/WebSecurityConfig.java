@@ -19,8 +19,8 @@ public class WebSecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorize -> authorize
-                        // Дозволяє всі запити
-                        .requestMatchers("/api/auth/register").permitAll() // Дозволяє реєстрацію
+
+                        .requestMatchers("/api/auth/**").permitAll() // Дозволяє реєстрацію
                 )
                 .csrf(AbstractHttpConfigurer::disable);
 
