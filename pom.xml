@@ -77,7 +77,11 @@
 			<artifactId>spring-security-crypto</artifactId>
 		</dependency>
 
-
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>2.0.1.Final</version> <!-- Версія може бути іншою -->
+		</dependency>
 
 	</dependencies>
 

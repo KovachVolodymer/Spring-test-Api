@@ -1,6 +1,7 @@
 package com.example.restapimongojwt.controllers;
 
 import com.example.restapimongojwt.JwtUtil.JwtUtil;
+import com.example.restapimongojwt.JwtUtil.request.LoginRequest;
 import com.example.restapimongojwt.models.User;
 import com.example.restapimongojwt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("api/auth")
@@ -21,39 +23,32 @@ public class UserController {
     UserRepository userRepository;
 
     @PostMapping("/register")
-    private ResponseEntity<Object> register(@RequestBody User user)
-    {
+    private ResponseEntity<Object> register(@RequestBody User user) {
         JwtUtil jwtUtil = new JwtUtil();
-        if (userRepository.existsByEmail(user.getEmail())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with this email already exists");
+        if (userRepository.existsByName(user.getName())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("User name already taken");
         }
 
-        String encryptedPassword = jwtUtil.encryptPassword(user.getPassword());
-        user.setPassword(encryptedPassword);
+        if (userRepository.existsByEmail(user.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Email already taken!");
+        }
+
+        user.setPassword(jwtUtil.encryptPassword(user.getPassword()));
 
         userRepository.save(user);
 
-        String token = jwtUtil.generateToken(user);
-
-        Map<String, Object> response = Map.of(
-                "token", token,
-                "userEmail", user.getEmail()
-
-        );
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body("User is register");
     }
 
     @PostMapping("/login")
-    private ResponseEntity<Object> login(@RequestBody User user)
-    {
+    private ResponseEntity<Object> login(@RequestBody LoginRequest login) {
+
         return null;
     }
-
-
-
-
-
 
 
 }

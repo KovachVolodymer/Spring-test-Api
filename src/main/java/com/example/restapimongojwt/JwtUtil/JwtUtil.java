@@ -16,48 +16,42 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-
 @Component
 public class JwtUtil {
     private static final String secretKey = "MySecretKeyKovachVolodymyrSecretKey";
 
-   @Value("${jwt.expiration}")
-   private long expiration;
+    @Value("${jwt.expiration}")
+    private long expiration;
 
 
-    public String createToken(Map<String, Object> claims, String subject)
-   {
+    public String createToken(Map<String, Object> claims, String subject) {
 
-       Date now = new Date();
-       Date expirationDate = new Date(now.getTime() + expiration);
+        Date now = new Date();
+        Date expirationDate = new Date(now.getTime() + expiration);
 
-       Key signingKey = new SecretKeySpec(secretKey.getBytes(), SignatureAlgorithm.HS256.getJcaName());
+        Key signingKey = new SecretKeySpec(secretKey.getBytes(), SignatureAlgorithm.HS256.getJcaName());
 
-       return Jwts.builder()
-               .setClaims(claims)
-               .setSubject(subject)
-               .setIssuedAt(now)
-               .setExpiration(expirationDate)
-               .signWith(signingKey)
-               .compact();
-   }
-
-   public String generateToken(User user)
-   {
-       Map<String, Object> claims=new HashMap<>();
-       claims.put("UserId",user.getId());
-       claims.put("UserEmail",user.getEmail());
-
-       return createToken(claims, user.getId());
-   }
-
-    public String encryptPassword(String password)
-    {
-        BCryptPasswordEncoder encoder= new BCryptPasswordEncoder();
-        return encoder.encode(password);
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(now)
+                .setExpiration(expirationDate)
+                .signWith(signingKey)
+                .compact();
     }
 
+    public String generateToken(User user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("UserId", user.getId());
+        claims.put("UserEmail", user.getEmail());
 
+        return createToken(claims, user.getId());
+    }
+
+    public String encryptPassword(String password) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.encode(password);
+    }
 
 
 }
