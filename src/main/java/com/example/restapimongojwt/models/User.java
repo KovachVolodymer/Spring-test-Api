@@ -1,25 +1,30 @@
 package com.example.restapimongojwt.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+
 
 @Data
 @Document(collection = "Users")
 public class User {
 
     @Id
-    private String Id;
+    private String id;
 
 
     private String name;
 
-    @Email
+
     private String email;
     private String password;
 
-
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password=password;
+    }
 }

@@ -3,6 +3,7 @@ package com.example.restapimongojwt.JwtUtil.Jwt;
 import com.example.restapimongojwt.models.User;
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,13 +20,13 @@ import java.util.Map;
 @Component
 public class JwtUtil {
 
-
-    private static final String jwtSecret="KovachSecretKey";
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
     @Value("${jwt.expiration}")
     private long expiration;
 
-    private static Key key()
+    private  Key key()
     {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
@@ -51,16 +52,16 @@ public class JwtUtil {
         return createToken(claims, user.getId());
     }
 
-    public static Boolean validatedToken(String token)
+    public Boolean validatedToken(String token)
     {
-       try {
-           Jwts.parserBuilder().setSigningKey(key()).build().parse(token);
-           return true;
-       }
-       catch (Exception e)
-       {
-           return false;
-       }
+        try {
+            Jwts.parserBuilder().setSigningKey(key()).build().parse(token);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
     }
 
 
