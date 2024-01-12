@@ -6,6 +6,7 @@ import com.example.restapimongojwt.JwtUtil.request.RegisterRequest;
 import com.example.restapimongojwt.JwtUtil.response.MessageResponse;
 import com.example.restapimongojwt.models.User;
 import com.example.restapimongojwt.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import javax.validation.Valid;
+
 import java.util.HashMap;
 import java.util.Map;
 
