@@ -1,4 +1,4 @@
-package com.example.restapimongojwt.JwtUtil.response;
+package com.example.restapimongojwt.jwtUtil.response;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package com.example.restapimongojwt.JwtUtil.request;
+package com.example.restapimongojwt.jwtUtil.request;
 
 
 import jakarta.validation.constraints.Email;

@@ -1,17 +1,15 @@
-package com.example.restapimongojwt.controllers;
+package com.example.restapimongojwt.controller;
 
-import com.example.restapimongojwt.JwtUtil.Jwt.JwtUtil;
-import com.example.restapimongojwt.JwtUtil.request.LoginRequest;
-import com.example.restapimongojwt.JwtUtil.request.RegisterRequest;
-import com.example.restapimongojwt.JwtUtil.response.MessageResponse;
-import com.example.restapimongojwt.models.User;
+import com.example.restapimongojwt.jwtUtil.jwt.JwtUtil;
+import com.example.restapimongojwt.jwtUtil.request.LoginRequest;
+import com.example.restapimongojwt.jwtUtil.request.RegisterRequest;
+import com.example.restapimongojwt.jwtUtil.response.MessageResponse;
+import com.example.restapimongojwt.model.User;
 import com.example.restapimongojwt.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

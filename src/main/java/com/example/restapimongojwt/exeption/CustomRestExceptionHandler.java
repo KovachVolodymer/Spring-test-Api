@@ -1,6 +1,4 @@
-package com.example.restapimongojwt.JwtUtil.response;
-
-import jakarta.servlet.http.HttpServletResponse;
+package com.example.restapimongojwt.exeption;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
