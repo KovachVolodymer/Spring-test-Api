@@ -25,8 +25,6 @@ public class WebSecurityConfig {
     @Autowired
     UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
@@ -47,6 +45,8 @@ public class WebSecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
+
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -54,12 +54,11 @@ public class WebSecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/**").permitAll()
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/auth/**","api/users/test").permitAll()
                 )
                 .csrf(AbstractHttpConfigurer::disable);
         return http.build();
-
 
     }
 
