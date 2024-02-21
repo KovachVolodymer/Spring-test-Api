@@ -34,14 +34,14 @@ public class JwtUtil {
     {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
-    public String createToken(Map<String, Object> claims, String subject) {
+    public String createToken(Map<String, Object> claims, String email) {
 
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + expiration);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(subject)
+                .setSubject(email)
                 .setIssuedAt(now)
                 .setExpiration(expirationDate)
                 .signWith(key())
@@ -51,22 +51,14 @@ public class JwtUtil {
     public String generateToken(User userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("UserId", userDetails.getId());
-        claims.put("UserEmail", userDetails.getEmail());
         claims.put("roles",userDetails.getRoles());
 
         return createToken(claims, userDetails.getEmail());
     }
 
-    public UsernamePasswordAuthenticationToken getAuthentication(String token) {
-        Claims claims = Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(token).getBody();
-        Collection<? extends GrantedAuthority> authorities =
-                ((List<?>) claims.get("roles")).stream()
-                        .map(authority -> new SimpleGrantedAuthority((String) authority))
-                        .collect(Collectors.toList());
-
-        UserDetailsImpl userDetails = new UserDetailsImpl(claims.getSubject(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
+    public String getUserNameFromJwtToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(key()).build()
+                .parseClaimsJws(token).getBody().getSubject();
     }
 
     public String extractToken(HttpServletRequest request) {
