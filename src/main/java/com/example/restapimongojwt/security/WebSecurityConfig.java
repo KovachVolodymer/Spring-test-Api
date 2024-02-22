@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -28,6 +29,11 @@ import java.util.Collections;
 @Configuration
 @EnableMethodSecurity
 public class WebSecurityConfig {
+
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
+    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -46,9 +52,10 @@ public class WebSecurityConfig {
 
                 }))
                 .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("api/auth/login","api/auth/register").permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(new AuthTokenFilter(),UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(authenticationJwtTokenFilter(),UsernamePasswordAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable);
         return http.build();
 

@@ -25,7 +25,10 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.roles.add("USER"); // Додаємо роль "USER" за замовчуванням
+        this.roles.add("ROLE_USER"); // Додаємо роль "USER" за замовчуванням
+    }
+
+    public User() {
     }
 
 }
