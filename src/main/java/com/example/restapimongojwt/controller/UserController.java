@@ -53,16 +53,15 @@ public class UserController {
         return "test";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("/addRole/{id}")
     public ResponseEntity<Object> addRole(@PathVariable String id,@RequestBody User user)
     {
         Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        User user1 = userOptional.get();
-        user1.setRoles(user.getRoles());
-        userRepository.save(user1);
+        Set<String> roles = userOptional.get().getRoles();
+        roles.addAll(user.getRoles());
+        userOptional.get().setRoles(roles);
+        userRepository.save(userOptional.get());
       return ResponseEntity.ok().body(new MessageResponse("Add new role"));
     }
 
